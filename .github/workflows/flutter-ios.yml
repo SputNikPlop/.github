@@ -70,6 +70,7 @@ jobs:
 
           # remove keychain
           keychain delete -p $RUNNER_TEMP/build.keychain
+          security default-keychain -s login.keychain
 
       - uses: actions/upload-artifact@v2
         with:
