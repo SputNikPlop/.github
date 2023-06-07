@@ -9,8 +9,10 @@ on:
       whats-new:
         default: "New features and minor bug fixes."
         type: string
-      app-id:
-        type: number
+      environment-name:
+        type: string
+      environment-url:
+        type: string
     secrets:
       APPSTORE_API_PRIVATE_KEY:
         required: true
@@ -25,6 +27,9 @@ jobs:
       APP_STORE_CONNECT_KEY_IDENTIFIER: PQPDACRFT7
       APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
       CERTIFICATE_PRIVATE_KEY: ${{ secrets.APPLE_CERTIFICATE_PRIVATE_KEY }}
+    environment:
+      name: ${{ inputs.environment-name }}
+      url: ${{ inputs.environment-url }}
     steps:
       - uses: actions/checkout@v2
         with:
