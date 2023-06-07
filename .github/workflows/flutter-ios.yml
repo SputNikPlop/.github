@@ -51,8 +51,6 @@ jobs:
 
       - working-directory: ${{ inputs.working-directory }}
         run: |
-          echo $(pwd)
-        
           flutter pub get
           pod repo update
 
