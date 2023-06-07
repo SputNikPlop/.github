@@ -37,8 +37,8 @@ jobs:
       - uses: paulhatch/semantic-version@v4
         id: semantic
         with:
-          change_path: ${{ inputs.working_directory }}
-          namespace: ${{ inputs.working_directory }}
+          change_path: ${{ inputs.working-directory }}
+          namespace: ${{ inputs.working-directory }}
 
       - uses: actions/setup-python@v3
         with:
@@ -49,7 +49,7 @@ jobs:
         with:
           channel: "stable"
 
-      - working-directory: ${{ inputs.working_directory }}
+      - working-directory: ${{ inputs.working-directory }}
         run: |
           flutter pub get
           pod repo update
@@ -72,10 +72,10 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: release.ipa
-          path: ${{ inputs.working_directory }}/build/ios/ipa
+          path: ${{ inputs.working-directory }}/build/ios/ipa
 
-      - working-directory: ${{ inputs.working_directory }}
+      - working-directory: ${{ inputs.working-directory }}
         run: app-store-connect publish --testflight --whats-new "${{ inputs.whats_new }}"
       - if: github.event_name == 'release'
-        working-directory: ${{ inputs.working_directory }}
+        working-directory: ${{ inputs.working-directory }}
         run: app-store-connect publish --app-store --whats-new "${{ inputs.whats_new }}"
