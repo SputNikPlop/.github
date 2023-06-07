@@ -78,7 +78,7 @@ jobs:
           path: ${{ inputs.working-directory }}/build/ios/ipa
 
       - working-directory: ${{ inputs.working-directory }}
-        run: app-store-connect publish --testflight --whats-new "${{ inputs.whats_new }}"
+        run: app-store-connect publish --testflight --whats-new "${{ inputs.whats-new }}"
       - if: github.event_name == 'release'
         working-directory: ${{ inputs.working-directory }}
-        run: app-store-connect publish --app-store --whats-new "${{ inputs.whats_new }}"
+        run: app-store-connect publish --app-store --whats-new "${{ inputs.whats-new }}"
