@@ -3,13 +3,13 @@ name: Release iOS to App Store
 on:
   workflow_call:
     inputs:
-      working_directory:
+      working-directory:
         default: "."
         type: string
-      whats_new:
+      whats-new:
         default: "New features and minor bug fixes."
         type: string
-      app_id:
+      app-id:
         type: number
     secrets:
       APPLE_CERTIFICATE_PRIVATE_KEY:
