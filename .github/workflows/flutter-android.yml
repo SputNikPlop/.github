@@ -1,0 +1,88 @@
+name: Release Android to Google Play Store
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        default: "."
+        type: string
+      whats-new:
+        default: "New features and minor bug fixes."
+        type: string
+      environment-name:
+        type: string
+      environment-url:
+        type: string
+    secrets:
+      UPLOAD_KEYSTORE:
+        required: true
+      UPLOAD_KEYSTORE_PASSWORD:
+        required: true
+      GOOGLE_PLAY_SERVICE_ACCOUNT_JSON:
+        required: true
+
+jobs:
+  apkaab:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment-name }}
+      url: ${{ inputs.environment-url }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: paulhatch/semantic-version@v4
+        id: semantic
+        with:
+          change_path: ${{ inputs.working-directory }}
+          namespace: ${{ inputs.working-directory }}
+
+      - run: echo $UPLOAD_KEYSTORE | base64 -d > ${{ inputs.working-directory }}/android/app/upload-keystore.jks
+        env:
+          UPLOAD_KEYSTORE: ${{ secrets.UPLOAD_KEYSTORE }}
+
+      - uses: actions/setup-java@v2
+        with:
+          distribution: "zulu"
+          java-version: "16"
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - working-directory: ${{ inputs.working-directory }}
+        run: |
+          flutter pub get
+          flutter build appbundle --release --build-name=${{ steps.semantic.outputs.version }}
+          flutter build apk --split-per-abi --release --build-name=${{ steps.semantic.outputs.version }}
+        env:
+          STORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: upload
+          STORE_FILE: upload-keystore.jks
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: app-armeabi-v7a-release.apk
+          path: ${{ inputs.working-directory }}/build/app/outputs/apk/release/app-armeabi-v7a-release.apk
+      - uses: actions/upload-artifact@v2
+        with:
+          name: app-arm64-v8a-release.apk
+          path: ${{ inputs.working-directory }}/build/app/outputs/apk/release/app-arm64-v8a-release.apk
+      - uses: actions/upload-artifact@v2
+        with:
+          name: app-x86_64-release.apk
+          path: ${{ inputs.working-directory }}/build/app/outputs/apk/release/app-x86_64-release.apk
+      - uses: actions/upload-artifact@v2
+        with:
+          name: app-release.aab
+          path: ${{ inputs.working-directory }}/build/app/outputs/bundle/release/app-release.aab
+
+      - uses: r0adkll/upload-google-play@v1.0.18
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.rtirl.beacon
+          releaseFiles: ${{ inputs.working-directory }}/build/app/outputs/bundle/release/app-release.aab
+          track: ${{ github.event_name == 'release' && 'production' || 'internal' }}
+          status: ${{ github.event_name == 'release' && 'completed' || 'draft' }}
+          mappingFile: ${{ inputs.working-directory }}/build/app/outputs/mapping/release/mapping.txt
