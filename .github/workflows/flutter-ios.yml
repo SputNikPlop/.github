@@ -12,6 +12,8 @@ on:
       app-id:
         type: number
     secrets:
+      APPSTORE_API_PRIVATE_KEY:
+        required: true
       APPLE_CERTIFICATE_PRIVATE_KEY:
         required: true
 
