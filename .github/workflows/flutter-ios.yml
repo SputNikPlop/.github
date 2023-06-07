@@ -25,11 +25,6 @@ jobs:
       APP_STORE_CONNECT_KEY_IDENTIFIER: PQPDACRFT7
       APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
       CERTIFICATE_PRIVATE_KEY: ${{ secrets.APPLE_CERTIFICATE_PRIVATE_KEY }}
-    concurrency:
-      group: ios-${{ github.ref }}
-    environment:
-      name: ios-${{ github.event_name == 'release' && 'app-store' || 'testflight' }}
-      url: https://appstoreconnect.apple.com/apps/${{ inputs.app_id }}/${{ github.event_name == 'release' && 'appstore' || 'testflight' }}
     steps:
       - uses: actions/checkout@v2
         with:
