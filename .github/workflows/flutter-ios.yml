@@ -66,6 +66,9 @@ jobs:
           security import $RUNNER_TEMP/AppleWWDRCAG3.cer -k $RUNNER_TEMP/build.keychain -T /usr/bin/codesign
 
           flutter build ipa --release --build-name=${{ steps.semantic.outputs.version }} --build-number=$(date +%Y%m%d%H%M) --export-options-plist=$RUNNER_TEMP/export_options.plist
+          
+          # upload debugging symbols
+          ./ios/Pods/FirebaseCrashlytics/upload-symbols -gsp ./ios/Runner/GoogleService-Info.plist -p ios ./build || true
 
           # remove keychain
           keychain delete -p $RUNNER_TEMP/build.keychain
