@@ -13,6 +13,8 @@ on:
         type: string
       environment-url:
         type: string
+      package-name:
+        type: string
     secrets:
       UPLOAD_KEYSTORE:
         required: true
@@ -81,7 +83,7 @@ jobs:
       - uses: r0adkll/upload-google-play@v1.0.18
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
-          packageName: com.rtirl.beacon
+          packageName: ${{ inputs.package-name }}
           releaseFiles: ${{ inputs.working-directory }}/build/app/outputs/bundle/release/app-release.aab
           track: ${{ github.event_name == 'release' && 'production' || 'internal' }}
           status: ${{ github.event_name == 'release' && 'completed' || 'draft' }}
