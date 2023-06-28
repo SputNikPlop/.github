@@ -38,7 +38,7 @@ jobs:
         id: semantic
         with:
           change_path: ${{ inputs.working-directory }}
-          namespace: ${{ inputs.working-directory == '.' && '' || inputs.working-directory }}
+          namespace: ${{ inputs.working-directory != '.' && inputs.working-directory || '' }}
 
       - run: echo $UPLOAD_KEYSTORE | base64 -d > ${{ inputs.working-directory }}/android/app/upload-keystore.jks
         env:
