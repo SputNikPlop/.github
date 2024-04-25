@@ -31,17 +31,17 @@ jobs:
       name: ${{ inputs.environment-name }}
       url: ${{ inputs.environment-url }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: paulhatch/semantic-version@v4
+      - uses: paulhatch/semantic-version@v5
         id: semantic
         with:
           change_path: ${{ inputs.working-directory }}
           namespace: ${{ inputs.working-directory != '.' && inputs.working-directory || '' }}
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           architecture: x64
@@ -74,7 +74,7 @@ jobs:
           keychain delete -p $RUNNER_TEMP/build.keychain
           security default-keychain -s login.keychain
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: release.ipa
           path: ${{ inputs.working-directory }}/build/ios/ipa
