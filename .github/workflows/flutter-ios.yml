@@ -57,8 +57,8 @@ jobs:
 
       - working-directory: ${{ inputs.working-directory }}
         run: |
-          flutter pub get
           pod repo update
+          flutter pub get
 
           # configure codesigning
           app-store-connect fetch-signing-files $(xcode-project detect-bundle-id) --platform IOS --type IOS_APP_STORE --create
