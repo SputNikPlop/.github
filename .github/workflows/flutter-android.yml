@@ -15,6 +15,11 @@ on:
         type: string
       package-name:
         type: string
+      publish:
+        description: 'Publish to Google Play Store'
+        required: false
+        default: true
+        type: boolean
     secrets:
       UPLOAD_KEYSTORE:
         required: true
@@ -80,7 +85,8 @@ jobs:
           name: app-release.aab
           path: ${{ inputs.working-directory }}/build/app/outputs/bundle/release/app-release.aab
 
-      - uses: r0adkll/upload-google-play@v1
+      - if: ${{ inputs.publish }}
+        uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: ${{ inputs.package-name }}
