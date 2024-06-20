@@ -55,8 +55,8 @@ jobs:
         with:
           channel: "stable"
 
-      - working-directory: ${{ inputs.working-directory }}
       - name: flutter build ipa
+      - working-directory: ${{ inputs.working-directory }}
         run: |
           pod repo update
           flutter pub get
