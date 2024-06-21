@@ -58,7 +58,7 @@ jobs:
           channel: 'stable'
 
       - name: flutter build apk
-      - working-directory: ${{ inputs.working-directory }}
+        working-directory: ${{ inputs.working-directory }}
         run: |
           flutter pub get
           flutter build appbundle --release --build-name=${{ steps.semantic.outputs.version }}
