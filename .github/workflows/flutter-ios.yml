@@ -40,11 +40,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: paulhatch/semantic-version@v5.0.1
+      - uses: paulhatch/semantic-version@v5.4.0
         id: semantic
         with:
           change_path: ${{ inputs.working-directory }}
           namespace: ${{ inputs.working-directory != '.' && inputs.working-directory || '' }}
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
 
       - uses: actions/setup-python@v5
         with:
