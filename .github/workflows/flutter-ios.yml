@@ -55,7 +55,6 @@ jobs:
           python-version: "3.11"
           architecture: x64
       - run: pip3 install codemagic-cli-tools
-      
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
